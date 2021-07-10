@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+  <script src="https://use.fontawesome.com/e3ae05b8e6.js"></script>
+  <title>Todo List</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <header>
+    <h1>Todo List</h1>
+  </header>
+  <main class="main">
+    <form action="" class="form">
+      <div class="inputWrapper">
+        <input type="text" class="todo-input">
+        <button class="todo-button" type="submit">
+          <i class="fa fa-plus-square"></i>
+        </button>
+        <div class="err">todoが入力されていません</div>
+      </div>
+      <div class="select">
+        <select name="todos" class="filter-btn">
+          <option value="all">All</option>
+          <option value="completed">Completed</option>
+          <option value="uncompleted">Uncompleted</option>
+        </select>
+      </div>
+    </form>
+    <div class="todo-container">
+      <ul class="todo-list"></ul>
+    </div>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+
+</html>
