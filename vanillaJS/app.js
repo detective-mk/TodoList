@@ -64,6 +64,12 @@ function deleteCheck(e) {
   }
 }
 
+function editTodo(e) {
+  console.log(e);
+  const item = e.target;
+  if (item.classList[0] === '');
+}
+
 function filterTodo(e) {
   const todos = todoList.childNodes;
   todos.forEach(function (todo) {
