@@ -9,6 +9,7 @@ const todoList = document.querySelector('.todo-list');
 document.addEventListener('DOMContentLoaded', getTodos);
 todoBtn.addEventListener('click', addTodo);
 todoList.addEventListener('click', deleteCheck);
+todoList.addEventListener('click', editTodo);
 filterBtn.addEventListener('change', filterTodo);
 
 // Functions
@@ -26,7 +27,13 @@ function addTodo(e) {
   const newTodo = document.createElement('li');
   newTodo.innerText = todoText;
   newTodo.classList.add('todo-item');
+  newTodo.setAttribute("data-text", todoText);
   todoDiv.appendChild(newTodo);
+  const editInput = document.createElement('input');
+  editInput.setAttribute("type", "text");
+  editInput.classList.add('edit_input');
+  editInput.classList.add('js_edit_input');
+  todoDiv.appendChild(editInput);
   // TODOをlocalStorageに格納
   saveLocalTodos(todoInput.value);
   // CompleteBtn
@@ -65,9 +72,30 @@ function deleteCheck(e) {
 }
 
 function editTodo(e) {
-  console.log(e);
   const item = e.target;
-  if (item.classList[0] === '');
+  let beforeText = item.innerText;
+  console.log(beforeText);
+  if (item.classList[0] === 'todo-item') {
+    const editInput = item.nextElementSibling;
+    editInput.value = item.innerText;
+    editInput.style.display = 'block';
+    item.style.display = 'none';
+    // フォーカスが外れるとinputを非表示にする
+    editInput.addEventListener('blur', function () {
+      item.innerText = editInput.value;
+      item.setAttribute("data-text", editInput.value);
+      editInput.style.display = 'none';
+      item.style.display = 'block';
+
+      // localStorageの値を入れ替える
+      let todos;
+      todos = JSON.parse(localStorage.getItem('todos'));
+      console.log(item.innerText);
+      todos.splice(todos.indexOf(beforeText), 1, item.innerText);
+      localStorage.setItem('todos', JSON.stringify(todos));
+
+    });
+  };
 }
 
 function filterTodo(e) {
@@ -114,6 +142,7 @@ function removeLocalTodos(todo) {
     todos = JSON.parse(localStorage.getItem('todos'));
   }
   const todoIndex = todo.children[0].innerText;
+  console.log(todoIndex);
   todos.splice(todos.indexOf(todoIndex), 1);
   localStorage.setItem('todos', JSON.stringify(todos));
 }
@@ -132,7 +161,13 @@ function getTodos(todo) {
     const newTodo = document.createElement('li');
     newTodo.innerText = todo;
     newTodo.classList.add('todo-item');
+    newTodo.setAttribute("data-text", todo);
     todoDiv.appendChild(newTodo);
+    const editInput = document.createElement('input');
+    editInput.setAttribute("type", "text");
+    editInput.classList.add('edit_input');
+    editInput.classList.add('js_edit_input');
+    todoDiv.appendChild(editInput);
     // CompleteBtn
     const completeBtn = document.createElement('button');
     completeBtn.innerHTML = '<i class="fa fa-check"></i>';

@@ -39,14 +39,14 @@ form input, form button {
 }
 
 form button {
-  color: #d88771;
+  color: #ff6f47;
   background: white;
   cursor: pointer;
   transition: all .3s ease;
 }
 
 form button:hover {
-  background: #d88771;
+  background: #ff6f47;
   color: white;
 }
 
@@ -99,6 +99,10 @@ form button:hover {
 
 .todo-item {
   padding: 0rem 0.5rem;
+  min-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .fa-trash, .fa-check {
@@ -153,6 +157,16 @@ select {
   color: #ff6f47;
 }
 
+.edit_input {
+  display: none;
+  padding: 0rem 0.5rem;
+  height: 50px;
+  font-size: 24px;
+  border: none;
+  flex: 1;
+  font-family: 'Poppins', sans-serif;
+}
+
 @media screen and (max-width: 480px) {
   .main {
     padding: 0 10px;
@@ -163,6 +177,10 @@ select {
   form input {
     padding: 10px 0;
     width: 100%;
+  }
+  form button {
+    color: white;
+    background: #ff6f47;
   }
   .todo-list {
     width: 80%;
@@ -176,5 +194,11 @@ select {
   }
   .select::after {
     padding: 0.6rem;
+  }
+  .todo-item {
+    min-width: 0;
+  }
+  .edit_input {
+    width: 175px;
   }
 }
