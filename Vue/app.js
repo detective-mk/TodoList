@@ -9,14 +9,10 @@ const app = Vue.createApp({
   },
   created() {
     // もしlocalStorageにtodoがあったら、それをtodosに渡す。
-    if (localStorage.getItem('todos') === null) {
-      this.todos = []
-    } else {
-      let localStorageTodos = []
-      localStorageTodos = JSON.parse(localStorage.getItem('todos'))
-      for (todo of localStorageTodos) {
-        this.todos.push(todo)
-      }
+    const todos = window.localStorage.getItem('todos')
+
+    if (todos) {
+      this.todos = JSON.parse(todos)
     }
   },
   methods: {
@@ -78,6 +74,10 @@ app.component('todo-item', {
     },
     index: {
       type: Number,
+      required: true,
+    },
+    done: {
+      type: Boolean,
       required: true,
     }
   },
