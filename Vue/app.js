@@ -5,14 +5,33 @@ const app = Vue.createApp({
       todoText: '',
       emptyText: false,
       selected: 'all',
+      onlyDone: false,
+      onlyUnDone: false,
     }
   },
   created() {
-    // もしlocalStorageにtodoがあったら、それをtodosに渡す。
+    // 画面描画時にもしlocalStorageにtodoがあったら、それをtodosに渡す。
     const todos = window.localStorage.getItem('todos')
 
     if (todos) {
       this.todos = JSON.parse(todos)
+    }
+  },
+  computed: {
+    // todo-itemコンポーネントを表示させる条件をコントロールしている。filter関数によりtodoのフィルター機能を実装している。
+    resultTodos() {
+      const onlyDone = this.onlyDone
+      const onlyUnDone = this.onlyUnDone
+      return this.todos
+        .filter(function (todo) {
+          if (onlyDone) {
+            return todo.done
+          }
+          if (onlyUnDone) {
+            return !todo.done
+          }
+          return true
+        })
     }
   },
   methods: {
@@ -27,36 +46,38 @@ const app = Vue.createApp({
     addTodo() {
       this.checkText()
       if (this.emptyText === false) {
-        this.todos.unshift(this.todoText)
+        this.todos.unshift({
+          text: this.todoText,
+          done: false,
+        })
         this.saveLocalTodos()
         this.todoText = ''
       }
+    },
+    completeTodo(index) {
+      this.todos[index].done = !this.todos[index].done
+      this.saveLocalTodos()
     },
     deleteTodo(index) {
       this.todos.splice(index, 1)
       this.saveLocalTodos()
     },
     editTodo(index, newTodo) {
-      this.todos.splice(index, 1, newTodo)
+      this.todos[index].text = newTodo
     },
     filterTodo() {
-      var that = this
-      this.todos.forEach(function (todo) {
-
-      })
       switch (this.selected) {
         case 'all':
-          console.log(this.selected)
-          if (this.complete) {
-            console.log('読み取れています！')
-          }
+          this.onlyDone = false
+          this.onlyUnDone = false
           break
         case 'completed':
-          // 子コンポーネントのdataがcomplete: trueのものだけを表示したい。JSのfilterが使えそう？子コンポーネントの状態completeを親に知らせる必要がある。
-          console.log(this.selected)
+          this.onlyDone = true
+          this.onlyUnDone = false
           break
         case 'uncompleted':
-          console.log(this.selected)
+          this.onlyDone = false
+          this.onlyUnDone = true
           break
       }
     },
@@ -69,7 +90,7 @@ const app = Vue.createApp({
 app.component('todo-item', {
   props: {
     todo: {
-      type: String,
+      type: Object,
       required: true,
     },
     index: {
@@ -84,20 +105,14 @@ app.component('todo-item', {
   template: '#todo-item',
   data() {
     return {
-      complete: false,
       isDelete: false,
       editMode: false,
-      editTodoText: this.todo,
-    }
-  },
-  computed: {
-    contactComplete() {
-      this.complete
+      editTodoText: this.todo.text,
     }
   },
   methods: {
-    isComplete() {
-      this.complete = !this.complete
+    isComplete(index) {
+      this.$emit('complete-todo', index)
     },
     editTodo(index) {
       this.editMode = !this.editMode
@@ -114,11 +129,3 @@ app.component('todo-item', {
 })
 
 app.mount('#app')
-
-/*************************
-残タスク
-************************/
-// タスク削除:アニメーション完了後→削除ができない→済
-// editモードの実装→済
-// filterの実装
-// タスクをlocalStorageに保存する処理→済

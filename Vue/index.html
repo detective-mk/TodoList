@@ -37,18 +37,19 @@
     <div class="todo-container">
       <ul class="todo-list">
         <!-- todoテンプレート start -->
-        <todo-item v-for="(todo, index) in todos" :key="todo" v-bind:todo="todo" v-bind:index="index"
-          @delete-todo="deleteTodo" @edit-todo="editTodo" v-model:done="todo.done"></todo-item>
+        <todo-item v-for="(todo, index) in resultTodos" :key="index" v-bind:todo="todo" v-bind:index="index"
+          @delete-todo="deleteTodo" @edit-todo="editTodo" :todo="todo" @complete-todo="completeTodo"
+          v-model:done="todo.done"></todo-item>
         <!-- todoテンプレート end -->
       </ul>
     </div>
   </main>
 
   <script type="text/x-template" id="todo-item">
-    <div class="todo" v-bind:class="{completed : complete, fall: isDelete}">
-      <li class="todo-item" data-text="todo" @click="editMode = !editMode" v-show="!editMode">{{todo}}</li>
+    <div class="todo" v-bind:class="{completed : done, fall: isDelete}">
+      <li class="todo-item" data-text="todo" @click="editMode = !editMode" v-show="!editMode">{{todo.text}}</li>
       <input type="text" class="edit_input" v-show="editMode" v-model="editTodoText" @blur="editTodo(index)">
-      <button class="complete-btn" v-on:click="isComplete"><i class="fa fa-check"></i></button>
+      <button class="complete-btn" v-on:click="isComplete(index)"><i class="fa fa-check"></i></button>
       <button class="trash-btn" @click="deleteTodo(index)"><i class="fa fa-trash"></i></button>
     </div>
   </script>
